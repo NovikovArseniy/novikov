@@ -28,7 +28,7 @@ public class ExchangeController {
         return "index";
     }
 
-	@Operation(summary = "Gets all users", tags = "user")
+	//@Operation(summary = "Gets all users", tags = "user")
 	@GetMapping("/show_orders")
 	public List<ExchangeOrder> showOrders(){
 		return orderRepository.orderList();
