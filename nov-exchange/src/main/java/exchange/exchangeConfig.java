@@ -1,42 +1,38 @@
 package exchange;
 
-import java.util.List;
 
-import org.springdoc.core.GroupedOpenApi;
-import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.web.servlet.config.annotation.CorsRegistry;
+import org.springframework.web.servlet.config.annotation.EnableWebMvc;
+import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
 
-import io.swagger.v3.oas.models.OpenAPI;
-import io.swagger.v3.oas.models.info.Contact;
-import io.swagger.v3.oas.models.info.Info;
-import io.swagger.v3.oas.models.info.License;
-import io.swagger.v3.oas.models.servers.Server;
+import springfox.documentation.builders.PathSelectors;
+import springfox.documentation.builders.RequestHandlerSelectors;
+import springfox.documentation.spi.DocumentationType;
+import springfox.documentation.spring.web.plugins.Docket;
+import springfox.documentation.swagger2.annotations.EnableSwagger2;
+
+
+
 
 @Configuration
-public class exchangeConfig {
+@EnableWebMvc
+@EnableSwagger2
+public class exchangeConfig implements WebMvcConfigurer{
+	
 	@Bean
-    GroupedOpenApi publicUserApi() {
-        return GroupedOpenApi.builder()
-        					.group("project")
-                             .pathsToMatch("classpath:/**")
-                             .build();
+	Docket api() {
+		return new Docket(DocumentationType.SWAGGER_2)
+				.select()
+				.apis(RequestHandlerSelectors.any())
+				.paths(PathSelectors.any())
+				.build();
+	}
+	
+    @Override
+    public void addCorsMappings(CorsRegistry registry) {
+        registry.addMapping("/**");
     }
-
-    @Bean
-    OpenAPI customOpenApi(@Value("${application-description}") String appDescription,
-                                 @Value("${application-version}") String appVersion) {
-        return new OpenAPI().info(new Info().title("Application API")
-                .version(appVersion)
-                .description(appDescription)
-                .license(new License().name("Apache 2.0")
-                        .url("http://springdoc.org"))
-                .contact(new Contact().name("username")
-                        .email("test@gmail.com")))
-                .servers(List.of(new Server().url("http://localhost:8080")
-                                .description("Dev service"),
-                        new Server().url("http://localhost:8082")
-                                .description("Beta service")));
-    }
-    
+   
 }
