@@ -3,8 +3,8 @@ package exchange.data;
 import java.util.ArrayList;
 import java.util.Comparator;
 import java.util.Date;
-import java.util.HashMap;
 import java.util.List;
+import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.atomic.AtomicLong;
 
 import org.springframework.stereotype.Repository;
@@ -18,11 +18,11 @@ public class OrderRepository {
 
 	private AtomicLong id;
 	
-	private HashMap<Long, ExchangeOrder> orders;
+	private ConcurrentHashMap<Long, ExchangeOrder> orders;
 	
 	public OrderRepository() {
 		this.id = new AtomicLong();
-		this.orders = new HashMap<Long, ExchangeOrder>();
+		this.orders = new ConcurrentHashMap<Long, ExchangeOrder>();
 		//тестовые данные
 		ExchangeOrder order = new ExchangeOrder();
 		order.setId(id.longValue());

@@ -3,7 +3,6 @@ package exchange.controllers;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -15,27 +14,36 @@ import exchange.data.OrderRepository;
 import exchange.entity.Currency;
 import exchange.entity.ExchangeOrder;
 import exchange.entity.ExchangeOrder.Action;
+import io.swagger.v3.oas.annotations.Hidden;
 import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.tags.Tag;
+import reactor.core.publisher.Flux;
+import reactor.core.publisher.Mono;
 
 @RestController
 @RequestMapping("/exchange")
+@Tag(name = "exchange", description = "exchange api")
 public class ExchangeController {
 	
 	@Autowired
 	private OrderRepository orderRepository;
 	
+	@Hidden
 	@GetMapping("/index")
     public String index(){
         return "index";
     }
-
-	@GetMapping("/show_orders")
-	public List<ExchangeOrder> showOrders(){
-		return orderRepository.orderList();
-	}
 	
+	@Operation(summary = "Shows list or orders")
+	@GetMapping("/show_orders")
+	public Flux<ExchangeOrder> showOrders(){
+		return Flux.fromArray(orderRepository.orderList().toArray(new ExchangeOrder[0]));
+	}	
+	
+	@Operation(summary = "Create order")
+	//@RequestBody
 	@PostMapping("/create_order")
-	public @ResponseBody ExchangeOrder saveOrder(
+	public @ResponseBody Mono<ExchangeOrder> saveOrder(
 			@RequestParam Currency currency,
 			@RequestParam double volume,
 			@RequestParam double priceInConventionalUnits,
@@ -46,14 +54,19 @@ public class ExchangeController {
 		order.setVolume(volume);
 		order.setPriceInConventionalUnits(priceInConventionalUnits);
 		order = orderRepository.save(order);
-		return order;
+		return Mono.just(order);
 	}
 	
 	@GetMapping("/show_by_id")
-	public ExchangeOrder showOne(@RequestParam long id) {
-		return orderRepository.showOrderById(id);
+	@Operation(summary = "Show order with specified id")
+	//@Parameter(name = "order id")
+	public Mono<ExchangeOrder> showOne(@RequestParam long id) {
+		return Mono.just(orderRepository.showOrderById(id));
 	}
 	
+
+	@Operation(summary = "Delete order with specified id")
+	//@Parameter(name = "order id")
 	@PostMapping("/delete")
 	public String deleteOrderById(@RequestParam long id) {
 		ExchangeOrder order = orderRepository.deleteOrderById(id);
