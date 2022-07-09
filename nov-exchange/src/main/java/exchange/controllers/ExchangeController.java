@@ -9,7 +9,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.RestController;
-
+import org.springframework.http.MediaType;
 import exchange.data.OrderRepository;
 import exchange.entity.Currency;
 import exchange.entity.ExchangeOrder;
@@ -24,6 +24,7 @@ import reactor.core.publisher.Mono;
 @RequestMapping("/exchange")
 @Tag(name = "exchange", description = "exchange api")
 public class ExchangeController {
+
 	
 	@Autowired
 	private OrderRepository orderRepository;
@@ -35,9 +36,10 @@ public class ExchangeController {
     }
 	
 	@Operation(summary = "Shows list or orders")
-	@GetMapping("/show_orders")
+	@GetMapping(value = "/show_orders", produces = MediaType.APPLICATION_NDJSON_VALUE)
 	public Flux<ExchangeOrder> showOrders(){
-		return Flux.fromArray(orderRepository.orderList().toArray(new ExchangeOrder[0]));
+		Flux<ExchangeOrder> result = orderRepository.orderList();
+		return result;
 	}	
 	
 	@Operation(summary = "Create order")

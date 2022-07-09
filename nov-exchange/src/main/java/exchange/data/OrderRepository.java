@@ -12,6 +12,7 @@ import org.springframework.stereotype.Repository;
 import exchange.entity.Currency;
 import exchange.entity.ExchangeOrder;
 import exchange.entity.ExchangeOrder.Action;
+import reactor.core.publisher.Flux;
 
 @Repository
 public class OrderRepository {
@@ -20,10 +21,13 @@ public class OrderRepository {
 	
 	private ConcurrentHashMap<Long, ExchangeOrder> orders;
 	
+	private Flux<ExchangeOrder> flux;
+	
 	public OrderRepository() {
 		this.id = new AtomicLong();
 		this.orders = new ConcurrentHashMap<Long, ExchangeOrder>();
 		//тестовые данные
+		this.flux = Flux.fromIterable(orders.values());
 		ExchangeOrder order = new ExchangeOrder();
 		order.setId(id.longValue());
 		order.setPlacedAt(new Date());
@@ -64,7 +68,8 @@ public class OrderRepository {
 		return order;
 	}
 	
-	public List<ExchangeOrder> orderList(){
+	public Flux<ExchangeOrder> orderList(){
+		/*
 		List<ExchangeOrder> exchangeOrders = new ArrayList<ExchangeOrder>(orders.values());
 		exchangeOrders.sort(new Comparator<ExchangeOrder>(){
 			public int compare(ExchangeOrder o1, ExchangeOrder o2) {
@@ -75,7 +80,8 @@ public class OrderRepository {
 				return 0;
 			}
 		});
-		return exchangeOrders;
+		return exchangeOrders; */
+		return flux;
 	}
 	public ExchangeOrder showOrderById(long id) {
 		return orders.get(id);
