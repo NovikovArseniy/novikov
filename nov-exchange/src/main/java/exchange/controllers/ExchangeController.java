@@ -1,7 +1,10 @@
 package exchange.controllers;
 
+import java.time.Duration;
 import java.util.List;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -9,6 +12,8 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.RestController;
+
+
 import org.springframework.http.MediaType;
 import exchange.data.OrderRepository;
 import exchange.entity.Currency;
@@ -25,6 +30,7 @@ import reactor.core.publisher.Mono;
 @Tag(name = "exchange", description = "exchange api")
 public class ExchangeController {
 
+	public static final Logger log = LoggerFactory.getLogger(ExchangeController.class);
 	
 	@Autowired
 	private OrderRepository orderRepository;
@@ -36,10 +42,12 @@ public class ExchangeController {
     }
 	
 	@Operation(summary = "Shows list or orders")
-	@GetMapping(value = "/show_orders", produces = MediaType.APPLICATION_NDJSON_VALUE)
+	@GetMapping(value = "/show_orders")//, produces = MediaType.APPLICATION_NDJSON_VALUE)
 	public Flux<ExchangeOrder> showOrders(){
 		Flux<ExchangeOrder> result = orderRepository.orderList();
-		return result;
+		return result.delayElements(Duration.ofSeconds(3))
+				.doOnNext(val -> log.info("Data: " + val))
+				.doOnComplete(() -> log.info("completed"));
 	}	
 	
 	@Operation(summary = "Create order")
