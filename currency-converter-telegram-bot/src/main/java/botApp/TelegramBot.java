@@ -43,7 +43,7 @@ public class TelegramBot extends SpringWebhookBot{
     private BotApiMethod<?> handleUpdate(Update update) throws IOException {
     	Message message = update.getMessage();
             if (message != null) {
-                return messageHandler.answerMessage(update.getMessage());
+                return messageHandler.answerMessage(message);
             }
         return null;
     }
@@ -53,6 +53,7 @@ public class TelegramBot extends SpringWebhookBot{
         try {
             return handleUpdate(update);
         } catch (Exception e) {
+        	e.printStackTrace();
         	return new SendMessage();
         }
 	}

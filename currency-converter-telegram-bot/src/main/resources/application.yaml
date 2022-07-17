@@ -1,6 +1,6 @@
 telegram:
   api-url: "https://api.telegram.org/"
-  webhook-path: "https://28c4-2a00-1370-8178-2ef9-f80a-a49a-e61a-dd74.eu.ngrok.io"
+  webhook-path: "https://176b-2a00-1370-8178-2ef9-78b9-4861-ef9d-3236.eu.ngrok.io"
   bot-name: "@myTestBotForLearningBot"
   bot-token: "5537154235:AAFj7bb8GT6YtxR_gCGmLc5Ja34qlz73qgk"
     
