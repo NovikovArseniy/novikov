@@ -6,7 +6,6 @@ import org.telegram.telegrambots.meta.api.methods.updates.SetWebhook;
 
 import botApp.TelegramBot;
 import botApp.handlers.MessageHandler;
-import botApp.parsers.CurrencyRateParser;
 import lombok.AllArgsConstructor;
 
 @Configuration

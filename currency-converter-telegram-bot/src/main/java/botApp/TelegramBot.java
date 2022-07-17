@@ -11,7 +11,6 @@ import org.telegram.telegrambots.meta.api.objects.Update;
 import org.telegram.telegrambots.starter.SpringWebhookBot;
 
 import botApp.handlers.MessageHandler;
-import botApp.parsers.CurrencyRateParser;
 import lombok.Getter;
 import lombok.Setter;
 

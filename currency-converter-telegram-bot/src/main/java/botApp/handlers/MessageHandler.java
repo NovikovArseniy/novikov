@@ -11,8 +11,6 @@ import botApp.keyboards.ReplyKeyboardMaker;
 import botApp.parsers.CurrencyRateParser;
 import lombok.RequiredArgsConstructor;
 
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 
 @Component
 @RequiredArgsConstructor
