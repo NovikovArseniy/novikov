@@ -7,6 +7,7 @@ import org.telegram.telegrambots.meta.api.methods.send.SendMessage;
 import org.telegram.telegrambots.meta.api.objects.Message;
 
 import botApp.enums.ButtonNameEnum;
+import botApp.keyboards.InlineKeyboardMaker;
 import botApp.keyboards.ReplyKeyboardMaker;
 import botApp.parsers.CurrencyRateParser;
 import lombok.RequiredArgsConstructor;
@@ -22,7 +23,10 @@ public class MessageHandler {
 	
 	
 	@Autowired
-	private ReplyKeyboardMaker replyKeyboardMaker;// = new ReplyKeyboardMaker();
+	private ReplyKeyboardMaker replyKeyboardMaker;
+	
+	@Autowired
+	private InlineKeyboardMaker inlineKeyboardMaker;// = new ReplyKeyboardMaker();
 	
     public BotApiMethod<?> answerMessage(Message message) {
         String chatId = message.getChatId().toString();
@@ -38,7 +42,8 @@ public class MessageHandler {
     	} else if (inputText.equals(ButtonNameEnum.CONVERT.getButtonName())) {
     		return new SendMessage(chatId, "Введите количество единиц валюты");
     	} else if (isNumber(inputText)) {
-    		return new SendMessage(chatId, "Разобраться с последовательными вызовами");
+    		return getConvertion(chatId);
+    		//return new SendMessage(chatId, "Разобраться с последовательными вызовами");
     	} else {
 			return getMistakeMessage(chatId);
 		}
@@ -50,11 +55,19 @@ public class MessageHandler {
         return sendMessage;
     }
 
+    private SendMessage addInlineKeyboard(SendMessage sendMessage) {
+    	sendMessage.setReplyMarkup(inlineKeyboardMaker.getInlineMessageButtonsOfCurrencies());
+    	return sendMessage;
+    }
+    
+    private SendMessage getConvertion(String chatId) {
+    	SendMessage sendMessage = new SendMessage(chatId, "Выберите единицы валюты");
+    	return addInlineKeyboard(sendMessage);
+    }
+    
     private SendMessage getStartMessage(String chatId) {
         SendMessage sendMessage = new SendMessage(chatId, "start");
-        sendMessage.enableMarkdown(true);
-        sendMessage.setReplyMarkup(replyKeyboardMaker.getMainMenuKeyboard());
-        return sendMessage;
+        return addMainMenuKeyboard(sendMessage);
     }
     
     private SendMessage getCurrencyRatesList(String chatId) {

@@ -1,9 +1,13 @@
 package botApp.enums;
 
 public enum Currencies {
-	RUB,
-	USD,
-	EUR,
-	GBP,
-	CNY;
+	RUB("RUB"),
+	USD("USD"),
+	EUR("EUR"),
+	GBP("GBP"),
+	CNY("CNY");
+	private final String name;
+	private Currencies(String name) {
+		this.name = name;
+	}
 }

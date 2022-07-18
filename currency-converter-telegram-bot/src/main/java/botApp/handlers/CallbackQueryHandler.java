@@ -8,9 +8,9 @@ import org.telegram.telegrambots.meta.api.objects.CallbackQuery;
 import lombok.AccessLevel;
 import lombok.experimental.FieldDefaults;
 
-//@Component
+@Component
 @FieldDefaults(makeFinal = true, level = AccessLevel.PRIVATE)
-public class CallBackQueryHandler {
+public class CallbackQueryHandler {
 
 	public BotApiMethod<?> processCallbackQuery(CallbackQuery buttonQuery){
         
@@ -18,6 +18,6 @@ public class CallBackQueryHandler {
 
         String data = buttonQuery.getData();
         
-        return new SendMessage(chatId, "Не сделано");
+        return new SendMessage(chatId, data + data);
 	}
 }

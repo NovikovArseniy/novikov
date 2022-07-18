@@ -5,6 +5,7 @@ import org.springframework.context.annotation.Configuration;
 import org.telegram.telegrambots.meta.api.methods.updates.SetWebhook;
 
 import botApp.TelegramBot;
+import botApp.handlers.CallbackQueryHandler;
 import botApp.handlers.MessageHandler;
 import lombok.AllArgsConstructor;
 
@@ -20,8 +21,8 @@ public class SpringConfig {
 
     @Bean
     public TelegramBot springWebhookBot(SetWebhook setWebhook,
-                                         MessageHandler messageHandler) {
-        TelegramBot bot = new TelegramBot(setWebhook, messageHandler);
+                                         MessageHandler messageHandler, CallbackQueryHandler callbackQueryHandler) {
+        TelegramBot bot = new TelegramBot(setWebhook, messageHandler, callbackQueryHandler);
 
         bot.setBotPath(telegramConfig.getWebhookPath());
         bot.setBotUsername(telegramConfig.getBotName());
