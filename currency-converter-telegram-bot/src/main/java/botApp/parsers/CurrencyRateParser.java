@@ -62,4 +62,8 @@ public class CurrencyRateParser {
 		}
 		return result.toString();
 	}
+	
+	public Double convert(Double value, String pair) {
+		return value*parseCurrencyRate(pair);
+	}
 }
